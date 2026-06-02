@@ -1,11 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-<script defer src="main.js"></script></head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My To-Do List</title>
+  <script defer src="main.js"></script></head>
+  <body>
+    <div class="container">
+      <h1>My Task Manager</h1>
+
+      <!-- Sidebar for daily tasks and projects -->
+      <div id="sidebar">
+        <div id="daily-tasks-container">
+          <p>Daily Tasks</p>
+        </div>
+
+        <h4>My Projects</h4>
+
+        <button id="add-new-project-button">+ Project</button>
+      </div>
+
+      <!-- Main content area for displaying tasks and project details -->
+      <div id="main-content"></div>
+    </div>
+  </body>
 </html>
