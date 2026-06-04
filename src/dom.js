@@ -1,4 +1,5 @@
 import {
+  projects,
   createNewProject,
   saveProjectsToLocalStorage,
 } from "./storeprojects.js";
@@ -10,11 +11,16 @@ function addProjectToMain() {
   projectDisplayDiv.classList.add("projects");
   projectsContainer.appendChild(projectDisplayDiv);
 
+  const sectionDiv = document.createElement("div");
+  sectionDiv.classList.add("section");
+  projectDisplayDiv.appendChild(sectionDiv);
+
   const projectName = document.createElement("input");
   projectName.type = "text";
   projectName.placeholder = "Project Name";
 
-  const projectDescription = document.createElement("textarea");
+  const projectDescription = document.createElement("input");
+  projectDescription.type = "text";
   projectDescription.placeholder = "Project Description";
 
   const dueDate = document.createElement("input");
@@ -34,6 +40,10 @@ function addProjectToMain() {
   priority.appendChild(mediumOption);
   priority.appendChild(highOption);
 
+  const tasksContainer = document.createElement("div");
+  tasksContainer.classList.add("tasks");
+  projectDisplayDiv.appendChild(tasksContainer);
+
   const addTaskBtn = document.createElement("button");
   addTaskBtn.textContent = "+ Add Task";
   addTaskBtn.classList.add("add-task");
@@ -41,7 +51,7 @@ function addProjectToMain() {
   const submitProjectBtn = document.createElement("button");
   submitProjectBtn.textContent = "Submit Project";
   submitProjectBtn.classList.add("submit-project");
-  projectDisplayDiv.append(
+  sectionDiv.append(
     projectName,
     projectDescription,
     dueDate,
@@ -55,7 +65,7 @@ function addProjectToMain() {
     taskDiv.classList.add("task");
     taskDiv.type = "text";
     taskDiv.placeholder = "Task Name";
-    projectDisplayDiv.appendChild(taskDiv);
+    tasksContainer.appendChild(taskDiv);
   });
 
   submitProjectBtn.addEventListener("click", () => {
@@ -82,18 +92,24 @@ function addProjectToMain() {
 
 function displayProjectFromStorage(project) {
   const projectsContainer = document.querySelector("#main-content");
+
   const projectDisplayDiv = document.createElement("div");
   projectDisplayDiv.classList.add("projects");
   projectsContainer.appendChild(projectDisplayDiv);
 
-  const projectName = document.createElement("input");
-  projectName.type = "text";
-  projectName.value = project.name;
-  projectName.readOnly = true;
+  const sectionDiv = document.createElement("div");
+  sectionDiv.classList.add("section");
+  projectDisplayDiv.appendChild(sectionDiv);
 
-  const projectDescription = document.createElement("textarea");
-  projectDescription.value = project.description;
-  projectDescription.readOnly = true;
+  const titleAndDescriptionDiv = document.createElement("div");
+  titleAndDescriptionDiv.classList.add("title-description");
+  sectionDiv.appendChild(titleAndDescriptionDiv);
+
+  const projectName = document.createElement("h3");
+  projectName.textContent = project.name;
+
+  const projectDescription = document.createElement("p");
+  projectDescription.textContent = project.description;
 
   const dueDate = document.createElement("input");
   dueDate.type = "date";
@@ -109,6 +125,19 @@ function displayProjectFromStorage(project) {
   tasksContainer.classList.add("tasks");
   projectDisplayDiv.appendChild(tasksContainer);
 
+  const deleteProjectBtn = document.createElement("button");
+  deleteProjectBtn.textContent = "Delete Project";
+  deleteProjectBtn.classList.add("delete-project");
+
+  deleteProjectBtn.addEventListener("click", () => {
+    projectDisplayDiv.remove();
+    const projectId = projects.findIndex((p) => p.id === project.id);
+    if (projectId !== -1) {
+      projects.splice(projectId, 1);
+      saveProjectsToLocalStorage();
+    }
+  });
+
   project.tasks.forEach((task) => {
     const taskInput = document.createElement("input");
     taskInput.type = "text";
@@ -117,7 +146,9 @@ function displayProjectFromStorage(project) {
     tasksContainer.appendChild(taskInput);
   });
 
-  projectDisplayDiv.append(projectName, projectDescription, dueDate, priority);
+  titleAndDescriptionDiv.append(projectName, projectDescription);
+
+  sectionDiv.append(dueDate, priority, deleteProjectBtn);
 }
 
 export { addProjectToMain, displayProjectFromStorage };

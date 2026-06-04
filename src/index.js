@@ -8,6 +8,8 @@ import {
   projects,
 } from "./storeprojects.js";
 
+addProjectToMain();
+
 loadProjectsFromLocalStorage();
 
 function renderProjects() {
